@@ -70,6 +70,9 @@ class DigitalProducts_ProductsService extends BaseApplicationComponent
         $record->promotable = $product->promotable;
         $record->taxCategoryId = $product->taxCategoryId;
         $record->price = $product->price;
+        $record->requireLicenseExpiration = $product->requireLicenseExpiration;
+        $record->licenseDurationTime = $product->licenseDurationTime;
+
 
         $productType = craft()->digitalProducts_productTypes->getProductTypeById($product->typeId);
 

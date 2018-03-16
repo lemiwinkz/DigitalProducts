@@ -280,6 +280,8 @@ class DigitalProducts_ProductElementType extends BaseElementType
     {
         return [
             'typeId' => AttributeType::Mixed,
+            'requireLicenseExpiration' => AttributeType::Bool,
+            'licenseDurationTime' => AttributeType::Number,
             'type' => AttributeType::Mixed,
             'postDate' => AttributeType::Mixed,
             'expiryDate' => AttributeType::Mixed,
@@ -354,9 +356,16 @@ class DigitalProducts_ProductElementType extends BaseElementType
     public function modifyElementsQuery(DbCommand $query, ElementCriteriaModel $criteria)
     {
         $query
-            ->addSelect("products.id, products.typeId, products.promotable, products.postDate, products.expiryDate, products.price, products.sku, products.taxCategoryId")
+            ->addSelect("products.id, products.typeId, products.promotable, products.postDate, products.expiryDate, products.price, products.sku, products.taxCategoryId, products.requireLicenseExpiration, products.licenseDurationTime")
             ->join('digitalproducts_products products', 'products.id = elements.id')
             ->join('digitalproducts_producttypes producttypes', 'producttypes.id = products.typeId');
+
+        if ($criteria->licenseDurationTime) {
+            $query->andWhere(DbHelper::parseDateParam('products.licenseDurationTime', $criteria->licenseDurationTime, $query->params));
+        }
+        if ($criteria->before) {
+            $query->andWhere(DbHelper::parseDateParam('products.requireLicenseExpiration', $criteria->befrequireLicenseExpirationore, $query->params));
+        }
 
         if ($criteria->postDate) {
             $query->andWhere(DbHelper::parseDateParam('products.postDate', $criteria->postDate, $query->params));

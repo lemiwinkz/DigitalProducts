@@ -140,6 +140,25 @@
 					{{ productFields.pricingFields(product) }}
 				</div>
 
+				<div class="pane meta">
+					{{ forms.checkboxField({
+						id: 'requireLicenseExpiration',
+						fieldLabel: 'Expires? '|t,
+						name: 'requireLicenseExpiration',
+						checked: product.requireLicenseExpiration,
+					}) }}
+
+					{{ forms.textField({
+						label: "License duration"|t,
+						id: 'licenseDurationTime',
+						name: 'licenseDurationTime',
+						value: product.licenseDurationTime,
+						placeholder: 'Enter a duration time'|t,
+						errors: product.getErrors('licenseDurationTime')
+					}) }}
+
+				</div>
+
 			</div>
 		</div>
 

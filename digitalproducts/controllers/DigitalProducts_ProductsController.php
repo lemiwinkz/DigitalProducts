@@ -419,6 +419,10 @@ class DigitalProducts_ProductsController extends BaseController
         $product->taxCategoryId = $data['taxCategoryId'] ? $data['taxCategoryId'] : $product->taxCategoryId;
         $product->slug = $data['slug'] ? $data['slug'] : $product->slug;
 
+        // Expiration data
+        $product->requireLicenseExpiration = $data['requireLicenseExpiration'];
+        $product->licenseDurationTime = $data['licenseDurationTime'];
+
         $product->localeEnabled = (bool)craft()->request->getPost('localeEnabled', $product->localeEnabled);
         $product->getContent()->title = craft()->request->getPost('title', $product->title);
         $product->setContentFromPost('fields');
