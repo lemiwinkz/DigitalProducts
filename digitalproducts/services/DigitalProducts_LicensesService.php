@@ -380,6 +380,45 @@ class DigitalProducts_LicensesService extends BaseApplicationComponent
     }
 
     /**
+     * Modify Query based on the hidden isLicensed field type.
+     *
+     * @param DbCommand $query
+     * @param array $params
+     */
+    public function modifyQuery (DbCommand $query, $params = array())
+    {
+        if (array_key_exists('productId', $params)) {
+            $this->isLicensedQuery($query, $params);
+        }
+    }
+
+    /**
+     *  Takes the given param - being a product id - and builds an array of userIds that this product is
+     * licensed to. We then andWhere() the query and pass in this array of userId's
+     * @param DbCommand $query
+     * @param array $params
+     */
+    public function isLicensedQuery(DbCommand $query, $params){
+        // Cache the product id
+        $desiredProduct = $params['productId'];
+
+        // Find all licenses that are enabled - with a product id of the entered param.
+        $criteria = craft()->elements->getCriteria('DigitalProducts_License');
+        $criteria->enabled = true;
+        $criteria->productId = $desiredProduct;
+        $licenses = $criteria->find();
+        $userIds = [];
+
+        // TODO: More effecient way to do this? Looping through all licenses feels a bit ancient...
+        foreach($licenses as $license){
+            $userIds[] = $license->userId;
+        }
+
+        // Up up and away
+        $query->andWhere(array('in', 'elements.id', $userIds));
+    }
+
+    /**
      * Delete a License.
      *
      * @param DigitalProducts_LicenseModel $license

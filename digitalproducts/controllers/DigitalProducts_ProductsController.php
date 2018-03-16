@@ -328,6 +328,10 @@ class DigitalProducts_ProductsController extends BaseController
 
         $variables['continueEditingUrl'] = "digitalproducts/products/".$variables['productType']->handle."/{id}".
             (craft()->isLocalized() && !empty($variables['localeId']) && craft()->getLanguage() != $variables['localeId'] ? '/'.$variables['localeId'] : '');
+
+        // Save and add another url
+        $variables['saveAddAnotherUrl'] = "digitalproducts/products/".$variables['productType']->handle."/new";
+
     }
 
     /**
