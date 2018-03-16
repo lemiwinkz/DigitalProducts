@@ -10,7 +10,7 @@ namespace Craft;
 
 class DigitalProducts_LicensesController extends BaseController
 {
-
+    protected $allowAnonymous = array('actionExpireLicenses');
     /**
      * @inheritDoc BaseController::init()
      */
@@ -89,6 +89,7 @@ class DigitalProducts_LicensesController extends BaseController
         $license->enabled = (bool)craft()->request->getPost('enabled');
         $license->ownerName = craft()->request->getPost('ownerName');
         $license->ownerEmail = craft()->request->getPost('ownerEmail');
+        $license->expiryDate = craft()->request->getPost('expiryDate') ? DateTime::createFromString(craft()->request->getPost('expiryDate'), craft()->timezone) : null;
 
         // Save it
         if (craft()->digitalProducts_licenses->saveLicense($license)) {
@@ -132,5 +133,27 @@ class DigitalProducts_LicensesController extends BaseController
             }
         }
     }
+
+    /**
+     *  Checks for licenses that may have expired and ends them
+     */
+    public function actionExpireLicenses(){
+        $query = craft()->db->createCommand()
+        ->select('id, expiryDate')
+        ->from('digitalproducts_licenses')
+            ->queryAll();
+        $dateTime = new DateTime();
+        $dateTime->setTimezone(new \DateTimeZone(craft()->timezone));
+
+        foreach($query as $license){
+
+            // Has the license expired.
+            if($dateTime > $license['expiryDate']){
+                craft()->digitalproducts_licenses->expireLicense($license['id']);
+            }
+        }
+    }
+
+
 
 }

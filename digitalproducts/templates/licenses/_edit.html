@@ -134,7 +134,15 @@
 					value: license.dateCreated,
 					disabled: true
 				}) }}
+
+				{{ forms.dateTimeField({
+					label: 'Expiry date'|t,
+					id: 'expiryDate',
+					name: 'expiryDate',
+					value: license.expiryDate,
+				}) }}
 			</div>
+
 		</div>
 	</div>
 {% endblock %}

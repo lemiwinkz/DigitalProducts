@@ -64,6 +64,7 @@ class DigitalProducts_LicensesService extends BaseApplicationComponent
 
         $record->ownerName = $license->ownerName;
         $record->ownerEmail = $license->ownerEmail;
+        $record->expiryDate = $license->expiryDate;
 
         if (empty($license->productId)) {
             $license->addError('productId', Craft::t('{attribute} cannot be blank.', ['attribute' => 'Product']));
@@ -121,9 +122,7 @@ class DigitalProducts_LicensesService extends BaseApplicationComponent
                     ['id' => $license->productId]));
             }
 
-            if($product->requireLicenseExpiration){
 
-            }
 
             $productType = $product->getProductType();
 
@@ -133,9 +132,20 @@ class DigitalProducts_LicensesService extends BaseApplicationComponent
             }
 
             $record->productId = $license->productId;
+
+            // Does the product require the license to expire? If so let's save that date onto the model.
+            if($product->requireLicenseExpiration){
+                $expiryDate = new DateTime();
+                $expiryDate->add(new DateInterval('P'.$product->licenseDurationTime.'D'));
+                $expiryDate->setTimezone(new \DateTimeZone(craft()->timezone));
+                $record->expiryDate = $expiryDate;
+            }
+
         } else if ($record->productId != $license->productId) {
             $license->addError('productId', Craft::t('The licensed product cannot be changed once a license has been created.'));
         }
+
+
 
         $record->validate();
         $license->addErrors($record->getErrors());
@@ -185,6 +195,10 @@ class DigitalProducts_LicensesService extends BaseApplicationComponent
         }
 
         return true;
+    }
+
+    public function expireLicense(){
+
     }
 
     /**
