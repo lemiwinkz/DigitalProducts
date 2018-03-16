@@ -323,6 +323,8 @@ class DigitalProducts_ProductModel extends BasePurchasable
             'sku' => AttributeType::String,
             'taxCategoryId' => AttributeType::Number,
             'price' => [AttributeType::Number, 'decimals' => 4],
+            'requireLicenseExpiration' => AttributeType::Bool,
+            'licenseDurationTime' => AttributeType::Number,
         ]);
     }
 }

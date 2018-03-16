@@ -199,6 +199,7 @@ class DigitalProducts_LicenseModel extends BaseElementModel
             'orderId' => AttributeType::Number,
             'dateCreated' => AttributeType::DateTime,
             'dateUpdated' => AttributeType::DateTime,
+            'expiryDate' => AttributeType::DateTime,
         ]);
     }
 }

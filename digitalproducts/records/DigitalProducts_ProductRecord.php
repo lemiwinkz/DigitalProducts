@@ -80,6 +80,8 @@ class DigitalProducts_ProductRecord extends BaseRecord
 
             'sku' => [AttributeType::String, 'required' => true],
             'price' => [AttributeType::Number, 'decimals' => 4, 'required' => false],
+            'requireLicenseExpiration' => AttributeType::Bool,
+            'licenseDurationTime' => AttributeType::Number,
         ];
     }
 }

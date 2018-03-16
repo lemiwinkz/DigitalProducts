@@ -121,6 +121,10 @@ class DigitalProducts_LicensesService extends BaseApplicationComponent
                     ['id' => $license->productId]));
             }
 
+            if($product->requireLicenseExpiration){
+
+            }
+
             $productType = $product->getProductType();
 
             if (!$productType) {

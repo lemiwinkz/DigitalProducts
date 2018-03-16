@@ -231,6 +231,8 @@ class DigitalProducts_LicenseElementType extends BaseElementType
             'orderId' => AttributeType::Number,
             'licenseKey' => AttributeType::String,
 
+            'expiryDate' => AttributeType::DateTime,
+
             'status' => [
                 AttributeType::String,
                 'default' => BaseElementModel::ENABLED
@@ -273,7 +275,7 @@ class DigitalProducts_LicenseElementType extends BaseElementType
     public function modifyElementsQuery(DbCommand $query, ElementCriteriaModel $criteria)
     {
         $query
-            ->addSelect("licenses.id, licenses.productId, licenses.licenseKey, licenses.ownerName, licenses.ownerEmail, licenses.userId, licenses.orderId, products.typeId as productTypeId")
+            ->addSelect("licenses.id, licenses.productId, licenses.licenseKey, licenses.ownerName, licenses.ownerEmail, licenses.userId, licenses.orderId, products.typeId as productTypeId, licenses.expiryDate")
             ->join('digitalproducts_licenses licenses', 'licenses.id = elements.id')
             ->leftJoin('digitalproducts_products products', 'products.id = licenses.productId')
             ->leftJoin('users users', 'users.id = licenses.userId')
@@ -293,6 +295,10 @@ class DigitalProducts_LicenseElementType extends BaseElementType
 
         if ($criteria->userEmail) {
             $query->andWhere(DbHelper::parseParam('users.email', $criteria->userEmail, $query->params));
+        }
+
+        if ($criteria->expiryDate) {
+            $query->andWhere(DbHelper::parseParam('licenses.expiryDate', $criteria->expiryDate, $query->params));
         }
 
         if ($criteria->owner) {
