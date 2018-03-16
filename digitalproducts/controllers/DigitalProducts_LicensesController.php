@@ -135,22 +135,17 @@ class DigitalProducts_LicensesController extends BaseController
     }
 
     /**
-     *  Checks for licenses that may have expired and ends them
+     *  Checks for licenses that have expired and ends them
      */
     public function actionExpireLicenses(){
         $query = craft()->db->createCommand()
         ->select('id, expiryDate')
         ->from('digitalproducts_licenses')
-            ->queryAll();
-        $dateTime = new DateTime();
-        $dateTime->setTimezone(new \DateTimeZone(craft()->timezone));
+        ->where('expiryDate < NOW()')
+        ->queryAll();
 
         foreach($query as $license){
-
-            // Has the license expired.
-            if($dateTime > $license['expiryDate']){
-                craft()->digitalproducts_licenses->expireLicense($license['id']);
-            }
+            DigitalProducts_LicensesService::expireLicense($license['id']);
         }
     }
 

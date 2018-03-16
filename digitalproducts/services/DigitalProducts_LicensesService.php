@@ -197,8 +197,15 @@ class DigitalProducts_LicensesService extends BaseApplicationComponent
         return true;
     }
 
-    public function expireLicense(){
-
+    public static function expireLicense(Int $licenseId){
+        $query = craft()->db->createCommand()
+            ->select('id, enabled, type')
+            ->from('elements')
+            ->where('type = '.$licenseId.'')
+            ->queryRow();
+        if($query['enabled'] && $query['type'] == 'DigitalProducts_License') {
+            ElementRecord::model()->updateByPk($licenseId, ['enabled' => 0]);
+        }
     }
 
     /**
