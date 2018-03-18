@@ -201,7 +201,7 @@ class DigitalProducts_LicensesService extends BaseApplicationComponent
         $query = craft()->db->createCommand()
             ->select('id, enabled, type')
             ->from('elements')
-            ->where('type = '.$licenseId.'')
+            ->where('id = '.$licenseId.'')
             ->queryRow();
         if($query['enabled'] && $query['type'] == 'DigitalProducts_License') {
             ElementRecord::model()->updateByPk($licenseId, ['enabled' => 0]);
