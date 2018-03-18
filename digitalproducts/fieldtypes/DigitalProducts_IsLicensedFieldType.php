@@ -1,30 +1,49 @@
 <?php
+
+
 /**
- * Created by PhpStorm.
- * User: Giel Tettelaar PC
- * Date: 3/14/2018
- * Time: 3:56 PM
+ * Class DigitalProducts_ProductsFieldType
+ *
+ * @author    Pixel & Tonic, Inc. <support@pixelandtonic.com>
+ * @copyright Copyright (c) 2016, Pixel & Tonic, Inc.
  */
 
 namespace Craft;
 
-
+ 
 class DigitalProducts_IsLicensedFieldType extends BaseFieldType{
 
+    /*
+    * Returns the fieldtype name
+    * @return string
+    */
     public function getName()
     {
         return Craft::t('Is licensed');
     }
+    
+    /*
+    * Have html we do not
+    * @return bool
+    */
     public function getInputHtml($name, $value)
     {
         return false;
     }
 
+    /*
+    * Has a content table it does not
+    * @return bool
+    */
     public function defineContentAttribute()
     {
         return false;
     }
-
+    
+    /* 
+    * Modifies the elements query to add an andWhere and make sure any elements are licensed to the product(s) entered in $value
+    * @return nothing - but does modify the element query if necesary
+    */
     public function modifyElementsQuery(DbCommand $query, $value)
     {
         if ($value !== null)
