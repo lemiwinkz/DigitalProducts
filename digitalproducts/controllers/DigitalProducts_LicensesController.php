@@ -10,6 +10,8 @@ namespace Craft;
 
 class DigitalProducts_LicensesController extends BaseController
 {
+    
+    // The expire licenses needs to be able to be accessed by CRON job
     protected $allowAnonymous = array('actionExpireLicenses');
     /**
      * @inheritDoc BaseController::init()
